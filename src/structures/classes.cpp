@@ -2,7 +2,7 @@
 
 // Constructor with optional values
 Order::Order(int id, Instrument instr, Side s, OrderMode mode, OrderType type,
-        double tgtP = 0.0, int tgtQ = 0, double execP = 0.0, int execQ = 0, long long ts = 0)
+        double tgtP, int tgtQ, double execP, int execQ, long long ts)
     : orderID(id), 
     instrument(instr), 
     side(s), 

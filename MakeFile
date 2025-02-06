@@ -1,5 +1,8 @@
 all:
-\tg++ -std=c++17 -I./src -o test_classes tests/structures/testClasses.cpp src/structures/classes.cpp
+	g++ -std=c++17 -I./src -o test_classes tests/structures/testClasses.cpp src/structures/classes.cpp
 
 run: all
-\t./test_classes
+	./test_classes
+
+clean:
+	rm -f test_classes  # Optional: Clean up the compiled file

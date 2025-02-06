@@ -1,6 +1,7 @@
 //File that tests /src/structures/classes.cpp
 #include <iostream>
-#include "src/structures/classes.h"
+#include "../../src/structures/classes.h"
+
 
 void testLimitOrder() {
     std::cout << "Running Test: Creating Limit Order\n";
