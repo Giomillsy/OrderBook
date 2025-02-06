@@ -1,43 +1,32 @@
-#include <iostream>
+#include "classes.h"
 
-enum class Instrument{
-    // Instrument being traded
-    STOCKS,
-    BONDS
-};
+// Constructor with optional values
+Order::Order(int id, Instrument instr, Side s, OrderMode mode, OrderType type,
+        double tgtP = 0.0, int tgtQ = 0, double execP = 0.0, int execQ = 0, long long ts = 0)
+    : orderID(id), 
+    instrument(instr), 
+    side(s), 
+    orderMode(mode), 
+    orderType(type),
+    tgtPrice(tgtP), 
+    tgtQuantity(tgtQ), 
+    execPrice(execP), 
+    execQuantity(execQ), 
+    timestamp(ts) {};
 
-enum class Side{
-    //Whether the instrument is being bought or sold
-    BUY,
-    SELL
-};
-
-enum class OrderMode{
-    // Whether it is a value/unit order. If it's limit it's unique
-    UNIT,
-    VALUE,
-    LIMIT
-};
-
-enum class OrderType{
-    // Two types of orders we're defining
-    LIMIT,
-    MARKET
-};
-
-class Order{
-    
-    std::string orderID;
-    Instrument instrument;
-    Side side;
-    OrderMode orderMode;
-    OrderType orderType;
-    double tgtPrice;
-    int tgtQuantity;
-    double execPrice;
-    int execQuantity;
-    long long timestamp;
     
 
-
-};
+void Order::printOrder() const {
+    std::cout << "OrderID: " << orderID << "\n"
+              << "Instrument: " << (instrument == Instrument::STOCKS ? "Stocks" : "Bonds") << "\n"
+              << "Side: " << (side == Side::BUY ? "Buy" : "Sell") << "\n"
+              << "Order Mode: " << (orderMode == OrderMode::UNIT ? "Unit" : 
+                                    orderMode == OrderMode::VALUE ? "Value" : "Limit") << "\n"
+              << "Order Type: " << (orderType == OrderType::LIMIT ? "Limit" : "Market") << "\n"
+              << "Target Price: " << tgtPrice << "\n"
+              << "Target Quantity: " << tgtQuantity << "\n"
+              << "Execution Price: " << execPrice << "\n"
+              << "Execution Quantity: " << execQuantity << "\n"
+              << "Timestamp: " << timestamp << "\n"
+              << "---------------------------\n";
+}
