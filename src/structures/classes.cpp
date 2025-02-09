@@ -1,10 +1,16 @@
 #include "classes.h"
 #include <chrono>
+#include <cmath>
 
+double Order::tickSize = 0.01;
 
 long long Order::getCurrentTimestamp(){
     using namespace std::chrono;
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
+
+long Order::roundToTickSize(long price){
+    return std::round(price/tickSize)*tickSize;
 }
 
 // Constructor with optional values
@@ -15,7 +21,7 @@ Order::Order(int id, Instrument instr, Side s, OrderType type,
     side(s),
     orderType(type),
     tgtQuantity(tgtQ), 
-    tgtPrice(tgtP),
+    tgtPrice(Order::roundToTickSize(tgtP)),
     execPrice(0),
     execQuantity(0),
     timestamp(Order::getCurrentTimestamp()){}

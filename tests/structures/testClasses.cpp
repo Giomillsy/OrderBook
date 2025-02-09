@@ -6,7 +6,7 @@
 void testLimitOrder() {
     std::cout << "Running Test: Creating Limit Order\n";
     Order order(1, Instrument::STOCKS, Side::BUY, OrderType::LIMIT, 
-                100.0, 50); // Buy 50 stocks at $100
+                50, 100.614); // Buy 50 stocks at $100
 
     order.printOrder();
     std::cout << "Limit Order Passed\n\n";

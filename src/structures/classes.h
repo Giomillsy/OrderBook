@@ -35,8 +35,11 @@ private:
     double execPrice;
     int execQuantity;
     long long timestamp;
+    static double tickSize;
 
     static long long getCurrentTimestamp();
+
+    static long roundToTickSize(long price);
 
 public:
 
@@ -50,3 +53,10 @@ public:
 };
 
 #endif
+
+/*
+class Book{
+// The order book, which contains and manages the orders
+private:
+}
+*/
