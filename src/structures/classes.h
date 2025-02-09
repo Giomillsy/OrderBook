@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <queue>
 
 enum class Instrument{
     // Instrument being traded
@@ -29,9 +30,8 @@ private:
     int orderID;
     Instrument instrument;
     Side side;
-    OrderType orderType;
     int tgtQuantity;
-    int tgtPrice;
+    double tgtPrice;
     double execPrice;
     int execQuantity;
     long long timestamp;
@@ -39,9 +39,10 @@ private:
 
     static long long getCurrentTimestamp();
 
-    static long roundToTickSize(long price);
+    static double roundToTickSize(double price);
 
 public:
+    OrderType orderType;    
 
     //Constructor
     Order(int id, Instrument instr, Side s, OrderType type, 
@@ -54,9 +55,18 @@ public:
 
 #endif
 
-/*
+#ifndef BOOK_H  
+#define BOOK_H
 class Book{
 // The order book, which contains and manages the orders
 private:
-}
-*/
+    std::queue<Order> marketQ; // Market orders    
+
+public:
+    void addOrder(Order o);
+
+    void showOrders();
+    
+};
+
+#endif

@@ -9,7 +9,7 @@ long long Order::getCurrentTimestamp(){
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
-long Order::roundToTickSize(long price){
+double Order::roundToTickSize(double price){
     return std::round(price/tickSize)*tickSize;
 }
 
@@ -39,4 +39,17 @@ void Order::printOrder() const {
               << "Execution Quantity: " << execQuantity << "\n"
               << "Timestamp: " << timestamp << "\n"
               << "---------------------------\n";
+}
+
+void Book::addOrder(Order o){
+    
+    switch (o.orderType){
+    case OrderType::MARKET:
+        marketQ.push(o);
+        return;
+    }
+}
+
+void Book::showOrders(){
+    std::cout << marketQ.size() <<" market orders in queue \n";
 }

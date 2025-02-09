@@ -2,7 +2,7 @@
 #include <iostream>
 #include "../../src/structures/classes.h"
 
-
+//Order Tests
 void testLimitOrder() {
     std::cout << "Running Test: Creating Limit Order\n";
     Order order(1, Instrument::STOCKS, Side::BUY, OrderType::LIMIT, 
@@ -21,11 +21,23 @@ void testMarketUnitOrder() {
     std::cout << "Market Unit Order Passed\n\n";
 }
 
+//Book Tests
+void testAddOrder(){
+
+    Order o = Order{2, Instrument::BONDS, Side::SELL, OrderType::MARKET, 200};
+
+    Book book{};
+    book.addOrder(o);
+    book.showOrders();
+
+}
+
 int main() {
 
     std::cout << "Testing Order Class: \n";
     testLimitOrder();
     testMarketUnitOrder();
+    testAddOrder();
     
     std::cout << "All tests passed!\n";
     return 0;
