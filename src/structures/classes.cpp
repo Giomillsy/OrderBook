@@ -1,18 +1,24 @@
 #include "classes.h"
+#include <chrono>
+
+
+long long Order::getCurrentTimestamp(){
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
 
 // Constructor with optional values
-Order::Order(int id, Instrument instr, Side s, OrderMode mode, OrderType type,
-        double tgtP, int tgtQ, double execP, int execQ, long long ts)
+Order::Order(int id, Instrument instr, Side s, OrderType type,
+        int tgtQ, double tgtP)
     : orderID(id), 
     instrument(instr), 
-    side(s), 
-    orderMode(mode), 
+    side(s),
     orderType(type),
-    tgtPrice(tgtP), 
     tgtQuantity(tgtQ), 
-    execPrice(execP), 
-    execQuantity(execQ), 
-    timestamp(ts) {};
+    tgtPrice(tgtP),
+    execPrice(0),
+    execQuantity(0),
+    timestamp(Order::getCurrentTimestamp()){}
 
     
 
@@ -20,8 +26,6 @@ void Order::printOrder() const {
     std::cout << "OrderID: " << orderID << "\n"
               << "Instrument: " << (instrument == Instrument::STOCKS ? "Stocks" : "Bonds") << "\n"
               << "Side: " << (side == Side::BUY ? "Buy" : "Sell") << "\n"
-              << "Order Mode: " << (orderMode == OrderMode::UNIT ? "Unit" : 
-                                    orderMode == OrderMode::VALUE ? "Value" : "Limit") << "\n"
               << "Order Type: " << (orderType == OrderType::LIMIT ? "Limit" : "Market") << "\n"
               << "Target Price: " << tgtPrice << "\n"
               << "Target Quantity: " << tgtQuantity << "\n"

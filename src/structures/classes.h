@@ -2,6 +2,7 @@
 #define ORDER_H
 
 #include <iostream>
+#include <chrono>
 
 enum class Instrument{
     // Instrument being traded
@@ -13,13 +14,6 @@ enum class Side{
     //Whether the instrument is being bought or sold
     BUY,
     SELL
-};
-
-enum class OrderMode{
-    // Whether it is a value/unit order. If it's limit it's unique
-    UNIT,
-    VALUE,
-    LIMIT
 };
 
 enum class OrderType{
@@ -35,19 +29,20 @@ private:
     int orderID;
     Instrument instrument;
     Side side;
-    OrderMode orderMode;
     OrderType orderType;
-    double tgtPrice;
     int tgtQuantity;
+    int tgtPrice;
     double execPrice;
     int execQuantity;
     long long timestamp;
 
+    static long long getCurrentTimestamp();
+
 public:
 
     //Constructor
-    Order(int id, Instrument instr, Side s, OrderMode mode, OrderType type,
-        double tgtP = 0.0, int tgtQ = 0, double execP = 0.0, int execQ = 0, long long ts = 0);    
+    Order(int id, Instrument instr, Side s, OrderType type, 
+        int tgtQ, double tgtPrice = 0.0);    
 
     //Prints for debugging
     void printOrder() const;
