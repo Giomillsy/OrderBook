@@ -1,4 +1,10 @@
-testClasses:
-	rm -f test_classes
-	g++ -std=c++17 -I./src -o test_classes tests/structures/testClasses.cpp src/structures/classes.cpp
-	./test_classes
+testBook:
+	rm -f testBook
+	g++ -std=c++23 -I./src -o testBook tests/structures/testBook.cpp src/structures/Book.cpp src/structures/Order.cpp
+	./testBook
+
+testOrder:
+	rm -f testOrder
+	g++ -std=c++23 -I./src -o testOrder tests/structures/testOrder.cpp src/structures/Order.cpp
+	./testOrder
+

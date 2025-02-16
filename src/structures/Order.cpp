@@ -1,6 +1,8 @@
-#include "classes.h"
+#include "Order.h"
 #include <chrono>
 #include <cmath>
+#include <map>
+#include <set>
 
 double Order::tickSize = 0.01;
 
@@ -26,7 +28,6 @@ Order::Order(int id, Instrument instr, Side s, OrderType type,
     execQuantity(0),
     timestamp(Order::getCurrentTimestamp()){}
 
-    
 
 void Order::printOrder() const {
     std::cout << "OrderID: " << orderID << "\n"
@@ -39,17 +40,4 @@ void Order::printOrder() const {
               << "Execution Quantity: " << execQuantity << "\n"
               << "Timestamp: " << timestamp << "\n"
               << "---------------------------\n";
-}
-
-void Book::addOrder(Order o){
-    
-    switch (o.orderType){
-    case OrderType::MARKET:
-        marketQ.push(o);
-        return;
-    }
-}
-
-void Book::showOrders(){
-    std::cout << marketQ.size() <<" market orders in queue \n";
 }

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <chrono>
 #include <queue>
+#include <map>
+#include <set>
 
 enum class Instrument{
     // Instrument being traded
@@ -27,26 +29,36 @@ class Order{
 // Defines my data structure for the orders
 
 private:
-    int orderID;
-    Instrument instrument;
+    OrderType orderType;
     Side side;
-    int tgtQuantity;
+    Instrument instrument;  
     double tgtPrice;
-    double execPrice;
-    int execQuantity;
+    double execPrice; 
     long long timestamp;
     static double tickSize;
+    int orderID;
+    int tgtQuantity;
+    int execQuantity;
+
 
     static long long getCurrentTimestamp();
 
     static double roundToTickSize(double price);
 
-public:
-    OrderType orderType;    
+public: 
+
+    friend class Book; //Gives orderbook access to all attributes
 
     //Constructor
     Order(int id, Instrument instr, Side s, OrderType type, 
-        int tgtQ, double tgtPrice = 0.0);    
+        int tgtQ, double tgtPrice = 0.0);   
+        
+    struct sizeCompare{
+        //Used for sorting the multiset. Largest orders sit at the top
+        bool operator()(const Order& a, const Order& b) const {
+            return a.tgtQuantity < b.tgtQuantity;
+        }
+    };
 
     //Prints for debugging
     void printOrder() const;
@@ -55,18 +67,3 @@ public:
 
 #endif
 
-#ifndef BOOK_H  
-#define BOOK_H
-class Book{
-// The order book, which contains and manages the orders
-private:
-    std::queue<Order> marketQ; // Market orders    
-
-public:
-    void addOrder(Order o);
-
-    void showOrders();
-    
-};
-
-#endif

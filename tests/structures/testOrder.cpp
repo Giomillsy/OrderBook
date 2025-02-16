@@ -1,12 +1,11 @@
-//File that tests /src/structures/classes.cpp
-#include <iostream>
-#include "../../src/structures/classes.h"
+
+#include "../../src/structures/Order.h"
 
 //Order Tests
 void testLimitOrder() {
     std::cout << "Running Test: Creating Limit Order\n";
     Order order(1, Instrument::STOCKS, Side::BUY, OrderType::LIMIT, 
-                50, 100.614); // Buy 50 stocks at $100
+                50, 100.614); // Buy 50 stocks at $100.614
 
     order.printOrder();
     std::cout << "Limit Order Passed\n\n";
@@ -21,23 +20,11 @@ void testMarketUnitOrder() {
     std::cout << "Market Unit Order Passed\n\n";
 }
 
-//Book Tests
-void testAddOrder(){
-
-    Order o = Order{2, Instrument::BONDS, Side::SELL, OrderType::MARKET, 200};
-
-    Book book{};
-    book.addOrder(o);
-    book.showOrders();
-
-}
-
 int main() {
 
-    std::cout << "Testing Order Class: \n";
+    std::cout << "Testing Book Class: \n";
     testLimitOrder();
     testMarketUnitOrder();
-    testAddOrder();
     
     std::cout << "All tests passed!\n";
     return 0;
