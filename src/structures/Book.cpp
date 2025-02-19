@@ -19,10 +19,10 @@ void Book::addOrder(Order o){
 
         switch(o.side){
         case (Side::BUY):
-            limitBuyM[o.tgtPrice].insert(o);
+            limitBuyM[o.tgtPrice].push_back(o);
             return;
         case (Side::SELL):
-            limitSellM[o.tgtPrice].insert(o);
+            limitSellM[o.tgtPrice].push_back(o);
             return;
         }
         break;
@@ -43,13 +43,12 @@ void Book::showOrders(){
 
 }
 
-void Book::showLimits(const std::map<double, std::multiset<Order, Order::sizeCompare>>& limitBook){
-    std::cout << "Price\tSize\n";
+void Book::showLimits(const  std::map<double, std::deque<Order>> limitBook){
+    std::cout << "ID\t\tPrice\t\tSize\n";
     for (const auto& [price, orders] : limitBook) {
         int totalSize = 0;
         for (auto& order : orders) {
-            totalSize += order.tgtQuantity;
+            std::cout << order.orderID<< "\t\t" << order.tgtPrice << "\t\t" << order.unexecQuantity << "\n";
         }
-        std::cout << price << "\t" << totalSize << "\n";
     }    
 }

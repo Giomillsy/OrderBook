@@ -4,7 +4,7 @@
 //Order Tests
 void testLimitOrder() {
     std::cout << "Running Test: Creating Limit Order\n";
-    Order order(1, Instrument::STOCKS, Side::BUY, OrderType::LIMIT, 
+    Order order(1, Side::BUY, OrderType::LIMIT, 
                 50, 100.614); // Buy 50 stocks at $100.614
 
     order.printOrder();
@@ -13,7 +13,7 @@ void testLimitOrder() {
 
 void testMarketUnitOrder() {
     std::cout << "Running test: Market Unit Order\n";
-    Order order(2, Instrument::BONDS, Side::SELL, OrderType::MARKET, 
+    Order order(2, Side::SELL, OrderType::MARKET, 
                 200); // Sell 200 bonds at market price
 
     order.printOrder();

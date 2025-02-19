@@ -4,7 +4,7 @@
 #include <map>
 #include <set>
 
-double Order::tickSize = 0.01;
+
 
 long long Order::getCurrentTimestamp(){
     using namespace std::chrono;
@@ -16,22 +16,21 @@ double Order::roundToTickSize(double price){
 }
 
 // Constructor with optional values
-Order::Order(int id, Instrument instr, Side s, OrderType type,
+Order::Order(int id, Side s, OrderType type,
         int tgtQ, double tgtP)
     : orderID(id), 
-    instrument(instr), 
     side(s),
     orderType(type),
     tgtQuantity(tgtQ), 
     tgtPrice(Order::roundToTickSize(tgtP)),
     execPrice(0),
     execQuantity(0),
+    unexecQuantity(tgtQ),
     timestamp(Order::getCurrentTimestamp()){}
 
 
 void Order::printOrder() const {
     std::cout << "OrderID: " << orderID << "\n"
-              << "Instrument: " << (instrument == Instrument::STOCKS ? "Stocks" : "Bonds") << "\n"
               << "Side: " << (side == Side::BUY ? "Buy" : "Sell") << "\n"
               << "Order Type: " << (orderType == OrderType::LIMIT ? "Limit" : "Market") << "\n"
               << "Target Price: " << tgtPrice << "\n"

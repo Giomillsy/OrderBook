@@ -7,12 +7,6 @@
 #include <map>
 #include <set>
 
-enum class Instrument{
-    // Instrument being traded
-    STOCKS,
-    BONDS
-};
-
 enum class Side{
     //Whether the instrument is being bought or sold
     BUY,
@@ -31,14 +25,14 @@ class Order{
 private:
     OrderType orderType;
     Side side;
-    Instrument instrument;  
     double tgtPrice;
     double execPrice; 
     long long timestamp;
-    static double tickSize;
+    static constexpr double tickSize = 0.05;
     int orderID;
     int tgtQuantity;
     int execQuantity;
+    int unexecQuantity;
 
 
     static long long getCurrentTimestamp();
@@ -50,16 +44,9 @@ public:
     friend class Book; //Gives orderbook access to all attributes
 
     //Constructor
-    Order(int id, Instrument instr, Side s, OrderType type, 
+    Order(int id, Side s, OrderType type, 
         int tgtQ, double tgtPrice = 0.0);   
         
-    struct sizeCompare{
-        //Used for sorting the multiset. Largest orders sit at the top
-        bool operator()(const Order& a, const Order& b) const {
-            return a.tgtQuantity < b.tgtQuantity;
-        }
-    };
-
     //Prints for debugging
     void printOrder() const;
 
