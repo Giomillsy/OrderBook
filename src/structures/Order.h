@@ -39,13 +39,21 @@ private:
 
     static double roundToTickSize(double price);
 
+    void exec(int qty, double p);
+
+    void notify() const;
+
 public: 
 
     friend class Book; //Gives orderbook access to all attributes
 
+    
+
     //Constructor
     Order(int id, Side s, OrderType type, 
         int tgtQ, double tgtPrice = 0.0);   
+
+    int getPrice() const;
         
     //Prints for debugging
     void printOrder() const;

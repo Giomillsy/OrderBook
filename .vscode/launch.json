@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug testBook",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/testBook.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "text": "-enable-pretty-printing",
+                    "description": "Enable GDB pretty printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build with Make"
+        }
+    ]
+}

@@ -11,14 +11,15 @@
 class Book{
 // The order book, which contains and manages the orders
 private:
-    std::queue<Order> marketSellQ; // Market sell orders
-    std::queue<Order> marketBuyQ; // Queue of market buy orders
     
-    std::map<double,std::deque<Order>> limitSellM; //Limit sell orders
-    std::map<double,std::deque<Order>> limitBuyM; //Limit buy orders
+    std::map<double,std::deque<Order>,std::less<double>> limitSell; //Limit sell orders
+    std::map<double,std::deque<Order>,std::greater<double>> limitBuy; //Limit buy orders
 
     // Prints out the limit orders on one side of the book
-    void showLimits(const std::map<double, std::deque<Order>>);
+    template <typename Comparator>
+    void showLimit(const std::map<double, std::deque<Order>,Comparator>);
+
+    void marketMatch(Order& o);
 
 public:
 
@@ -28,7 +29,7 @@ public:
 
     void addOrder(Order o);
 
-    void showOrders();
+    void showOrders(); // Prints orders on both side of the book
     
 };
 

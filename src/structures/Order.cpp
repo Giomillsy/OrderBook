@@ -15,6 +15,52 @@ double Order::roundToTickSize(double price){
     return std::round(price/tickSize)*tickSize;
 }
 
+void Order::exec(int qty, double prc){
+    /* 3 flows:
+    - Final execution that fully fills the rest of the order
+    - Partial exec
+    */
+
+    execQuantity += qty;
+    unexecQuantity -= qty;
+
+    switch (orderType){
+    case  OrderType::MARKET:
+        // The notify happens in Book
+        execPrice += prc*(static_cast<double>(qty)/static_cast<double>(tgtQuantity));
+        break;
+    case OrderType::LIMIT:
+        execPrice = tgtPrice;
+        if (unexecQuantity==0){
+            //Checking if this is the final exec, which means communication needed
+            this->notify();
+        }
+        break;
+    }
+
+    return;
+
+}
+
+void Order::notify() const{
+    /*
+    Send message to user who submitted order
+
+    Send different message if the order failed
+
+    For now it prints instead of communicating
+    */
+
+    std::string failedOrder = "false";
+    if (unexecQuantity != 0 ){
+        failedOrder = "true";
+    }
+    std::cout << "\nID\t\t" << "Exec Price\t" << "Exec Qty\t" << "Failed Order\n";
+    std::cout << orderID << "\t\t" << execPrice << "\t\t" << execQuantity << "\t\t" << failedOrder << "\n\n";
+
+    return;
+}
+
 // Constructor with optional values
 Order::Order(int id, Side s, OrderType type,
         int tgtQ, double tgtP)
@@ -27,6 +73,9 @@ Order::Order(int id, Side s, OrderType type,
     execQuantity(0),
     unexecQuantity(tgtQ),
     timestamp(Order::getCurrentTimestamp()){}
+
+
+int Order::getPrice() const {return tgtPrice;}
 
 
 void Order::printOrder() const {
