@@ -52,6 +52,7 @@ void testMarketMatching(){
 
     std::cout << "Exec: \n\n";
     Order oM0 = Order{5,Side::SELL,OrderType::MARKET,10000};
+    
     book.addOrder(oM0);
     
     std::cout << "After Exec: \n\n";
