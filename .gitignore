@@ -1,2 +1,7 @@
+
+#Executables
 *.exe
+
+#Whole directories
 /.vscode
+build/
