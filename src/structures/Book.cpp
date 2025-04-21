@@ -13,6 +13,7 @@ void Book::addOrder(Order o){
         // Add order to queue based on price    
 
         // Attempt to cross the order before it's added
+        this->marketMatch(o);
         limitBuy[o.tgtPrice].push_back(o);
         return;
 
@@ -72,6 +73,18 @@ void Book::marketMatch(Order& o){
             for (auto orderIt = orderDeque.begin(); orderIt != orderDeque.end();){
                 Order& l = *orderIt;
 
+                bool canCross;
+                switch (o.side){
+                case Side::BUY:
+                    canCross = o.tgtPrice>l.tgtPrice;
+                    break;
+                case Side::SELL:
+                    canCross = o.tgtPrice<l.tgtPrice;
+                    break;
+                }
+
+                if (!canCross){return;}
+
                 if (o.unexecQuantity <= l.unexecQuantity){
                     //market Order gets filled in, but limit doesn't
                     //Or both are filled
@@ -107,9 +120,7 @@ void Book::marketMatch(Order& o){
         }
 
         // Failed execution
-
-        //Adjust price for the fact it was partially filled
-        o.execPrice *= o.tgtQuantity/o.execQuantity;
+       
         return;
     },limitMap);
 

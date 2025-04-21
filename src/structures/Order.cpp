@@ -21,16 +21,19 @@ void Order::exec(int qty, double prc){
     - Partial exec
     */
 
+    if (prc< 0.0 || qty < 0){
+        throw std::runtime_error("Invalid Input: Price or Quantity is negative");
+    }
+
+    unsigned long value = static_cast<unsigned long>(std::round(prc*qty));
+    unsigned long prevValue = static_cast<unsigned long>(std::round(execPrice*execQuantity));
+    execPrice = static_cast<double>((value+prevValue)/(execQuantity+qty));
     execQuantity += qty;
     unexecQuantity -= qty;
 
+
     switch (orderType){
-    case  OrderType::MARKET:
-        // The notify happens in Book
-        execPrice += prc*(static_cast<double>(qty)/static_cast<double>(tgtQuantity));
-        break;
     case OrderType::LIMIT:
-        execPrice = tgtPrice;
         if (unexecQuantity==0){
             //Checking if this is the final exec, which means communication needed
             this->notify();
