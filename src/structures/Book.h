@@ -21,13 +21,7 @@ private:
 
     void marketMatch(Order& o);
 
-    bool checkCross(Order& o,Order& l) const;
-
 public:
-
-#ifdef TESTING_MODE
-    friend void testAddOrder();
-#endif
 
     void addOrder(Order o);
 

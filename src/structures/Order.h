@@ -22,6 +22,7 @@ enum class OrderType{
 class Order{
 // Defines my data structure for the orders
 
+
 private:
     OrderType orderType;
     Side side;
@@ -44,7 +45,7 @@ private:
     void notify() const;
 
 public: 
-
+    friend class OrderTestHelper; //Gives my unit tests for Order class access
     friend class Book; //Gives orderbook access to all attributes
 
     

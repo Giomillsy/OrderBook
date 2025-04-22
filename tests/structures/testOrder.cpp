@@ -1,31 +1,21 @@
+#define CATCH_CONFIG_USE_APPROX
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
+#include "structures/Order.h" 
 
-#include "../../src/structures/Order.h"
+struct OrderTestHelper {
+    static int& orderID(Order& o) {return o.orderID;}
+    static int& tgtQuantity(Order& o) {return o.tgtQuantity;}
+    static double& tgtPrice(Order& o) {return o.tgtPrice;}
+};
 
-//Order Tests
-void testLimitOrder() {
-    std::cout << "Running Test: Creating Limit Order\n";
-    Order order(1, Side::BUY, OrderType::LIMIT, 
-                50, 100.614); // Buy 50 stocks at $100.614
 
-    order.printOrder();
-    std::cout << "Limit Order Passed\n\n";
-}
-
-void testMarketUnitOrder() {
-    std::cout << "Running test: Market Unit Order\n";
-    Order order(2, Side::SELL, OrderType::MARKET, 
-                200); // Sell 200 bonds at market price
-
-    order.printOrder();
-    std::cout << "Market Unit Order Passed\n\n";
-}
-
-int main() {
-
-    std::cout << "Testing Book Class: \n";
-    testLimitOrder();
-    testMarketUnitOrder();
+TEST_CASE("Basic Order Construction", "[Order]") {
+    Order o(1, Side::BUY, OrderType::LIMIT, 150,1.1);
     
-    std::cout << "All tests passed!\n";
-    return 0;
+    REQUIRE(OrderTestHelper::orderID(o) == 1);
+    REQUIRE(OrderTestHelper::tgtQuantity(o) == 150);
+    REQUIRE(OrderTestHelper::tgtPrice(o) == Catch::Approx(1.1));
 }
+
+
