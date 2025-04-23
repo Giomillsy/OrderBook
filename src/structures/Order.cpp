@@ -24,13 +24,16 @@ void Order::exec(int qty, double prc){
 
     // Error catches
     if (prc< 0.0 || qty <= 0){
-        throw std::runtime_error("Invalid Input: Price or Quantity is negative or zero");
+        throw std::logic_error("Invalid Input: Price or Quantity is negative or zero");
     }
     if (orderType == OrderType::LIMIT && side == Side::BUY && prc > tgtPrice){
-        throw std::runtime_error("Invalid Input: Invalid price, prc > tgtPrice for limit buy");        
+        throw std::logic_error("Invalid Input: Invalid price, prc > tgtPrice for limit buy");        
     }
     if (orderType == OrderType::LIMIT && side == Side::SELL && prc < tgtPrice){
-        throw std::runtime_error("Invalid Input: Invalid price, prc < tgtPrice for limit sell");          
+        throw std::logic_error("Invalid Input: Invalid price, prc < tgtPrice for limit sell");          
+    }
+    if (qty > unexecQuantity){
+        throw std::logic_error("Invalid Input: Quantity to be executed greater than oustanding quantity");
     }
 
     double newValue = (execPrice*execQuantity)+(prc*qty);

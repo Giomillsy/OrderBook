@@ -19,7 +19,6 @@ struct OrderTestHelper {
 
 };
 
-
 TEST_CASE("Basic Order Construction", "[Order]") {
     Order o(1, Side::BUY, OrderType::LIMIT, 150,1.1);
     
@@ -73,4 +72,36 @@ TEST_CASE("Basic Partial Exec", "[Order]"){
     REQUIRE(OrderTestHelper::unexecQuantity(o) == 0);
     REQUIRE(OrderTestHelper::execQuantity(o) == 100);
 
+}
+
+TEST_CASE("Invalid Limit Order Execution", "[Order]"){
+
+    Order o(4,Side::BUY,OrderType::LIMIT,25,25.2);
+
+    int qty = 20;
+    double prc = 26;
+
+    //Require that if a limit order tries to buy above it's tgt price
+    // that an error is thrown
+    REQUIRE_THROWS_AS(OrderTestHelper::exec(o,qty,prc),std::logic_error);
+}
+
+TEST_CASE("Invalid Price Execution", "[Order]"){
+    Order o(3,Side::BUY,OrderType::MARKET,1,10);
+
+    int qty = 1;
+    double prc = -10;
+
+     //Price can never be negative, if it is an error has occured.
+    REQUIRE_THROWS_AS(OrderTestHelper::exec(o,qty,prc),std::logic_error);
+}
+
+TEST_CASE("Invalid Quantity of Execution", "[Order]"){
+    Order o(3,Side::BUY,OrderType::MARKET,1,10);
+
+    int qty = 2;
+    double prc = 10;
+
+    //Can't execute more quantity than an order has
+    REQUIRE_THROWS_AS(OrderTestHelper::exec(o,qty,prc),std::logic_error);
 }
