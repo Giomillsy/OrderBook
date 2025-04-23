@@ -21,13 +21,20 @@ void Order::exec(int qty, double prc){
     - Partial exec
     */
 
-    if (prc< 0.0 || qty < 0){
-        throw std::runtime_error("Invalid Input: Price or Quantity is negative");
+
+    // Error catches
+    if (prc< 0.0 || qty <= 0){
+        throw std::runtime_error("Invalid Input: Price or Quantity is negative or zero");
+    }
+    if (orderType == OrderType::LIMIT && side == Side::BUY && prc > tgtPrice){
+        throw std::runtime_error("Invalid Input: Invalid price, prc > tgtPrice for limit buy");        
+    }
+    if (orderType == OrderType::LIMIT && side == Side::SELL && prc < tgtPrice){
+        throw std::runtime_error("Invalid Input: Invalid price, prc < tgtPrice for limit sell");          
     }
 
-    unsigned long value = static_cast<unsigned long>(std::round(prc*qty));
-    unsigned long prevValue = static_cast<unsigned long>(std::round(execPrice*execQuantity));
-    execPrice = static_cast<double>((value+prevValue)/(execQuantity+qty));
+    double newValue = (execPrice*execQuantity)+(prc*qty);
+    execPrice = newValue/(execQuantity+qty);
     execQuantity += qty;
     unexecQuantity -= qty;
 
