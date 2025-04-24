@@ -19,9 +19,10 @@ private:
     template <typename Comparator>
     void showLimit(const std::map<double, std::deque<Order>,Comparator>);
 
-    void marketMatch(Order& o);
+    virtual void marketMatch(Order& o);
 
 public:
+    friend class BookTestHelper; //Helper for unit testing
 
     void addOrder(Order o);
 

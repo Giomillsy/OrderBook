@@ -42,7 +42,7 @@ private:
 
     void exec(int qty, double p);
 
-    void notify() const;
+    virtual void notify() const;
 
 public: 
     friend class OrderTestHelper; //Gives my unit tests for Order class access
