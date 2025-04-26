@@ -24,7 +24,7 @@ private:
 public:
     friend class BookTestHelper; //Helper for unit testing
 
-    void addOrder(Order o);
+    void addOrder(Order& o);
 
     void showOrders(); // Prints orders on both side of the book
     

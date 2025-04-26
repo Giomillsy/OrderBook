@@ -2,7 +2,7 @@
 #include "Book.h"
 #include <variant>
 
-void Book::addOrder(Order o){
+void Book::addOrder(Order& o){
     
     switch (o.orderType){
     case (OrderType::MARKET):
@@ -14,7 +14,9 @@ void Book::addOrder(Order o){
 
         // Attempt to cross the order before it's added
         this->marketMatch(o);
-        limitBuy[o.tgtPrice].push_back(o);
+        if (o.unexecQuantity != 0){
+            limitBuy[o.tgtPrice].push_back(o);
+        }
         return;
 
     }

@@ -16,9 +16,8 @@ public:
 };
 
 class TestOrder: public Order{
-    mutable bool isNotified = false;
-
 public:
+    mutable bool isNotified = false;
     TestOrder(int id, Side s, OrderType type,
         int tgtQ, double tgtP)
     : Order(id,s,type,tgtQ,tgtP){}
@@ -37,27 +36,34 @@ struct BookTestHelper{
     static void marketMatch(Book& b, Order& o){return b.marketMatch(o);}
 };
 
-TEST_CASE("Base case addOrder: Limit Order added","[Book]"){
+
+
+//addOrder tests
+
+TEST_CASE("Limit Order added","[Book]"){
     TestBook b;
     
-    TestOrder o(1,Side::BUY,OrderType::LIMIT,100,5.5);
+    TestOrder o1(1,Side::BUY,OrderType::LIMIT,100,5.5);
 
-    b.addOrder(o);
+    b.addOrder(o1);
 
     REQUIRE(b.isMarketMatchCalled);
     
 }
 
-/*
-TEST_CASE("Base case addOrder: Add order partial fill","[Book]"){
-    //Test order gets added correctly to book
-    //Test market orders get executed
+TEST_CASE("Market Order Added"){
+    TestBook b;
+    
+    TestOrder o(1,Side::BUY,OrderType::MARKET,100,5.5);
+    b.addOrder(o);
+
+    REQUIRE(b.isMarketMatchCalled);
+    REQUIRE(o.isNotified);
+    
 }
 
-TEST_CASE("Base case addOrder: Add order failed order","[Book]"){
-    //Test order gets added correctly to book
-    //Test market orders get executed
-}
 
-*/
+//marketMatch test
+
+
 
