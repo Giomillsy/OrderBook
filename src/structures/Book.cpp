@@ -15,7 +15,14 @@ void Book::addOrder(Order& o){
         // Attempt to cross the order before it's added
         this->marketMatch(o);
         if (o.unexecQuantity != 0){
-            limitBuy[o.tgtPrice].push_back(o);
+            switch (o.side){
+            case Side::SELL:
+                limitSell[o.tgtPrice].push_back(o);
+                break;
+            case Side::BUY:
+                limitBuy[o.tgtPrice].push_back(o);
+                break;
+            }
         }
         return;
 

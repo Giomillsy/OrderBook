@@ -40,7 +40,7 @@ private:
 
     static double roundToTickSize(double price);
 
-    void exec(int qty, double p);
+    virtual void exec(int qty, double p);
 
     virtual void notify() const;
 
@@ -55,6 +55,10 @@ public:
         int tgtQ, double tgtPrice = 0.0);   
 
     int getPrice() const;
+
+    int getUnexecQty() const;
+
+    int getID() const;
         
     //Prints for debugging
     void printOrder() const;

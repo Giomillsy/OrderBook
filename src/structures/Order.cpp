@@ -3,7 +3,7 @@
 #include <cmath>
 #include <map>
 #include <set>
-
+#include <limits>
 
 
 long long Order::getCurrentTimestamp(){
@@ -85,11 +85,19 @@ Order::Order(int id, Side s, OrderType type,
     execPrice(0),
     execQuantity(0),
     unexecQuantity(tgtQ),
-    timestamp(Order::getCurrentTimestamp()){}
+    timestamp(Order::getCurrentTimestamp()){
+        if (type == OrderType::MARKET){
+            if (s == Side::BUY){tgtPrice = std::numeric_limits<double>::max();}
+            if (s == Side::SELL){tgtPrice = -std::numeric_limits<double>::max();}
+        }
+    }
 
 
 int Order::getPrice() const {return tgtPrice;}
 
+int Order::getUnexecQty() const {return unexecQuantity;}
+
+int Order::getID() const {return orderID;}
 
 void Order::printOrder() const {
     std::cout << "OrderID: " << orderID << "\n"
