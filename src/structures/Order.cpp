@@ -64,6 +64,8 @@ void Order::notify() const{
     For now it prints instead of communicating
     */
 
+    /*
+
     std::string failedOrder = "false";
     if (unexecQuantity != 0 ){
         failedOrder = "true";
@@ -71,7 +73,11 @@ void Order::notify() const{
     std::cout << "\nID\t\t" << "Exec Price\t" << "Exec Qty\t" << "Failed Order\n";
     std::cout << orderID << "\t\t" << execPrice << "\t\t" << execQuantity << "\t\t" << failedOrder << "\n\n";
 
+    */
+
     return;
+
+
 }
 
 // Constructor with optional values
