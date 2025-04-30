@@ -12,12 +12,15 @@ class Book{
 // The order book, which contains and manages the orders
 private:
     
-    std::map<double,std::deque<Order>,std::less<double>> limitSell; //Limit sell orders
-    std::map<double,std::deque<Order>,std::greater<double>> limitBuy; //Limit buy orders
+    using LimitSellMap = std::map<double, std::deque<Order>, std::less<double>>;
+    using LimitBuyMap  = std::map<double, std::deque<Order>,std::greater<double>>;
+
+    LimitSellMap limitSell;
+    LimitBuyMap  limitBuy;
 
     // Prints out the limit orders on one side of the book
     template <typename Comparator>
-    void showLimit(const std::map<double, std::deque<Order>,Comparator>);
+    void showLimit(const std::map<double, std::deque<Order>,Comparator>& limitBook);
 
     virtual void marketMatch(Order& o);
 

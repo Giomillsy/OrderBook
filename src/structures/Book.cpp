@@ -3,9 +3,12 @@
 #include <variant>
 
 void Book::addOrder(Order& o){
+    //Adds an order to the book class
     
     switch (o.orderType){
     case (OrderType::MARKET):
+        //Market order to match
+
         this->marketMatch(o);
         o.notify();
         return;    
@@ -30,6 +33,7 @@ void Book::addOrder(Order& o){
 }
 
 void Book::showOrders(){
+    //Prints the current limit orders in the book
 
     std::cout << "Limit Orders Sell:\n";
     Book::showLimit(limitSell);
@@ -41,7 +45,9 @@ void Book::showOrders(){
 }
 
 template <typename Comparator>
-void Book::showLimit(const  std::map<double, std::deque<Order>,Comparator> limitBook){
+void Book::showLimit(const  std::map<double, std::deque<Order>,Comparator>& limitBook){
+    //Prints one side of the limit book to console
+
     std::cout << "ID\t\tPrice\t\tSize\n";
     for (const auto& [price, orders] : limitBook) {
         int totalSize = 0;
@@ -55,10 +61,9 @@ void Book::marketMatch(Order& o){
     //Matches a market order with an order in the limit book
 
     //Holds multiple types solves the maps being functionally similar but semtically the different
-    std::variant<
-        std::map<double,std::deque<Order>,std::greater<double>>*,
-        std::map<double,std::deque<Order>,std::less<double>>*
-    > limitMap;
+    using LimitMapVariant = std::variant<LimitBuyMap*, LimitSellMap*>;
+    LimitMapVariant limitMap;
+
 
     //Gets the relevant side of the limit book
     switch (o.side){
@@ -75,13 +80,15 @@ void Book::marketMatch(Order& o){
         int qtyToExec = 0;
 
         //Iterates through the map
-        for (auto it = lMap->begin(); it != lMap->end(); ){
+        for (auto it = lMap -> begin(); it != lMap -> end(); ){
             auto& orderDeque = it->second; 
+
 
             //Iterates through the deque and removes limit orders as fully executed
             for (auto orderIt = orderDeque.begin(); orderIt != orderDeque.end();){
-                Order& l = *orderIt;
+                auto& l = *orderIt;
 
+                // Checks if it can cross the book instantly
                 bool canCross;
                 switch (o.side){
                 case Side::BUY:
@@ -90,37 +97,33 @@ void Book::marketMatch(Order& o){
                 case Side::SELL:
                     canCross = o.tgtPrice<l.tgtPrice;
                     break;
+                default:
+                    throw std::logic_error("Invalid Input: Wasn't buy or sell in side");
                 }
 
+                //If it can't cross the Book, the execution fails. All market orders cross with arbitarily high or low tgtPrices
                 if (!canCross){return;}
 
-                if (o.unexecQuantity <= l.unexecQuantity){
-                    //market Order gets filled in, but limit doesn't
-                    //Or both are filled
-                    qtyToExec = o.unexecQuantity;
-                    l.exec(qtyToExec,it->first);
-                    o.exec(qtyToExec,it->first);
+                // Amount of quantity that can be executed with this limit order
+                int qtyToExec = std::min(o.unexecQuantity,l.unexecQuantity);
+                l.exec(qtyToExec,it->first);
+                o.exec(qtyToExec,it->first);
 
-                    //Remove order if fully executed
-                    if (l.unexecQuantity == 0) {
-                        orderIt = orderDeque.erase(orderIt); 
-                    } else {
-                        ++orderIt; 
-                    }
-                    return;
-
-                } else {
-                    // Limit Order gets filled in, but market doesn't
-                    qtyToExec = l.unexecQuantity;
-                    o.exec(qtyToExec, it->first);
-                    l.exec(qtyToExec, it->first);
+                //If the limit order full executed, it needs to be removed
+                // Or the itterator needs to go forward one
+                if (l.unexecQuantity == 0) {
                     orderIt = orderDeque.erase(orderIt);
+                } else {
+                    ++orderIt;
                 }
+    
+                //If the liqudity searching order is fully executed, end matching
+                if (o.unexecQuantity == 0) return;
             }    
 
             //If the deque is empty, remove the price level
             if (orderDeque.empty()) {
-                it = lMap->erase(it);
+                it = lMap -> erase(it);
             } else {
                 ++it;
             }        
@@ -128,7 +131,7 @@ void Book::marketMatch(Order& o){
         
         }
 
-        // Failed execution
+        // Failed execution. Liquidity exhausted
        
         return;
     },limitMap);

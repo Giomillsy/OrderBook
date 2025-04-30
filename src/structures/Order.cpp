@@ -36,21 +36,17 @@ void Order::exec(int qty, double prc){
         throw std::logic_error("Invalid Input: Quantity to be executed greater than oustanding quantity");
     }
 
+    // Finds the cost of the execution
     double newValue = (execPrice*execQuantity)+(prc*qty);
     execPrice = newValue/(execQuantity+qty);
     execQuantity += qty;
     unexecQuantity -= qty;
 
 
-    switch (orderType){
-    case OrderType::LIMIT:
-        if (unexecQuantity==0){
-            //Checking if this is the final exec, which means communication needed
-            this->notify();
-        }
-        break;
+    if (unexecQuantity == 0 && orderType == OrderType::LIMIT){
+        //Checking if this is the final exec, which means communication needed
+        this->notify();
     }
-
     return;
 
 }
@@ -61,23 +57,15 @@ void Order::notify() const{
 
     Send different message if the order failed
 
-    For now it prints instead of communicating
+    For now it does nothing
     */
-
-    /*
 
     std::string failedOrder = "false";
     if (unexecQuantity != 0 ){
         failedOrder = "true";
     }
-    std::cout << "\nID\t\t" << "Exec Price\t" << "Exec Qty\t" << "Failed Order\n";
-    std::cout << orderID << "\t\t" << execPrice << "\t\t" << execQuantity << "\t\t" << failedOrder << "\n\n";
-
-    */
 
     return;
-
-
 }
 
 // Constructor with optional values
@@ -93,6 +81,7 @@ Order::Order(int id, Side s, OrderType type,
     unexecQuantity(tgtQ),
     timestamp(Order::getCurrentTimestamp()){
         if (type == OrderType::MARKET){
+            //Makes it always match at all prices
             if (s == Side::BUY){tgtPrice = std::numeric_limits<double>::max();}
             if (s == Side::SELL){tgtPrice = -std::numeric_limits<double>::max();}
         }
@@ -106,6 +95,8 @@ int Order::getUnexecQty() const {return unexecQuantity;}
 int Order::getID() const {return orderID;}
 
 void Order::printOrder() const {
+    //Prints the order for debugging
+
     std::cout << "OrderID: " << orderID << "\n"
               << "Side: " << (side == Side::BUY ? "Buy" : "Sell") << "\n"
               << "Order Type: " << (orderType == OrderType::LIMIT ? "Limit" : "Market") << "\n"
