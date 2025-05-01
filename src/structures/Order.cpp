@@ -60,12 +60,10 @@ void Order::notify() const{
     For now it does nothing
     */
 
-    std::string failedOrder = "false";
-    if (unexecQuantity != 0 ){
-        failedOrder = "true";
-    }
 
     return;
+
+
 }
 
 // Constructor with optional values
