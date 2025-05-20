@@ -2,6 +2,8 @@
 add_library(orderBook
     structures/Order.cpp
     structures/Book.cpp
+    structures/Ring.h
+    structures/SpscQ.h
 )
 
 #Make headers visible

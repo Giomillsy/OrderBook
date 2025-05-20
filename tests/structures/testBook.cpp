@@ -39,8 +39,8 @@ public:
 
 struct BookTestHelper{
     //Getters
-    static std::map<double,std::deque<Order>,std::less<double>>&  limitSell(Book& b){return b.limitSell;}
-    static std::map<double,std::deque<Order>,std::greater<double>>& limitBuy(Book& b){return b.limitBuy;}
+    static std::map<double,std::deque<Order>,std::less<>>&  limitSell(Book& b){return b.limitSell;}
+    static std::map<double,std::deque<Order>,std::greater<>>& limitBuy(Book& b){return b.limitBuy;}
 
     //Access private methods
     static void marketMatch(Book& b, Order& o){return b.marketMatch(o);}

@@ -2,7 +2,6 @@
 #define BOOK_H
 
 #include <map>
-#include <set>
 #include <queue>
 #include <deque>
 #include "Order.h"
@@ -12,8 +11,8 @@ class Book{
 // The order book, which contains and manages the orders
 private:
     
-    using LimitSellMap = std::map<double, std::deque<Order>, std::less<double>>;
-    using LimitBuyMap  = std::map<double, std::deque<Order>,std::greater<double>>;
+    using LimitSellMap = std::map<double, std::deque<Order>, std::less<>>;
+    using LimitBuyMap  = std::map<double, std::deque<Order>,std::greater<>>;
 
     LimitSellMap limitSell;
     LimitBuyMap  limitBuy;
@@ -25,7 +24,11 @@ private:
     virtual void marketMatch(Order& o);
 
 public:
-    friend class BookTestHelper; //Helper for unit testing
+
+    //Destructor
+    virtual ~Book() = default;
+
+friend struct BookTestHelper; //Helper for unit testing
 
     void addOrder(Order& o);
 

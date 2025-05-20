@@ -48,17 +48,23 @@ public:
     friend class OrderTestHelper; //Gives my unit tests for Order class access
     friend class Book; //Gives orderbook access to all attributes
 
-    
+    //Default Constructor
+    Order()
+        : orderType(OrderType::LIMIT), side(Side::BUY), tgtPrice(0.0), execPrice(0.0),
+          timestamp(0), orderID(-1), tgtQuantity(0), execQuantity(0), unexecQuantity(0) {}
 
-    //Constructor
-    Order(int id, Side s, OrderType type, 
-        int tgtQ, double tgtPrice = 0.0);   
+    //Destructor
+    virtual ~Order() = default;
 
-    int getPrice() const;
+    //Main Constructor
+    Order(int id, Side s, OrderType type,
+        int tgtQ, double tgtPrice = 0.0);
 
-    int getUnexecQty() const;
+    [[nodiscard]] int getPrice() const;
 
-    int getID() const;
+    [[nodiscard]] int getUnexecQty() const;
+
+    [[nodiscard]] int getID() const;
         
     //Prints for debugging
     void printOrder() const;

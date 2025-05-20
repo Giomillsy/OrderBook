@@ -11,6 +11,12 @@ FetchContent_MakeAvailable(Catch2)
 add_executable(orderTests
     structures/testOrder.cpp
     structures/testBook.cpp
+    structures/testRing.cpp
+    structures/TestHelpers.h
+)
+
+target_include_directories(orderTests PRIVATE
+        ${catch2_SOURCE_DIR}/src
 )
 
 target_link_libraries(orderTests PRIVATE orderBook Catch2::Catch2WithMain)
