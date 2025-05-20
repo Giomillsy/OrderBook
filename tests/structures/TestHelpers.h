@@ -36,6 +36,7 @@ public:
     //Setters
     static void setHead(Ring<O, N>& r, std::size_t h) { r.head = h; }
     static void setTail(Ring<O, N>& r, std::size_t t) { r.tail = t; }
+    static void setBuffer(Ring<O, N>& r, Order& o, int pos) { r.buffer[pos] = o; }
 
     static bool doPush(Ring<O, N>& r,Order& o) {return r.push(o); }
     static std::optional<O> doPop(Ring<O, N>& r) { return r.pop(); }
