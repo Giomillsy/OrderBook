@@ -9,7 +9,7 @@
 template<typename O, size_t N>
 class SpscQ {
 public:
-    Ring<O, N> ring[N];
+    Ring<O, N> ring;
 
     bool push(const O& o) {
         return ring.push(o);
