@@ -1,0 +1,2 @@
+/usr/bin/ar qc liborderBook.a CMakeFiles/orderBook.dir/structures/Order.cpp.o CMakeFiles/orderBook.dir/structures/Book.cpp.o
+/usr/bin/ranlib liborderBook.a

@@ -1,0 +1,5 @@
+if(EXISTS "/home/gio/Documents/Projects/OrderBook/tests/orderTests-b12d07c_tests.cmake")
+  include("/home/gio/Documents/Projects/OrderBook/tests/orderTests-b12d07c_tests.cmake")
+else()
+  add_test(orderTests_NOT_BUILT-b12d07c orderTests_NOT_BUILT-b12d07c)
+endif()

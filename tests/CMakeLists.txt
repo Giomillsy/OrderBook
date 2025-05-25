@@ -1,6 +1,6 @@
 # Sanitizer options
 option(ENABLE_TSAN "Enable ThreadSanitizer" OFF)
-option(ENABLE_ASAN "Enable AddressSanitizer" ON)
+option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
 
 if (ENABLE_TSAN AND ENABLE_ASAN)
     message(FATAL_ERROR "Cannot enable both TSAN and ASAN at the same time.")

@@ -33,8 +33,8 @@ void addLimits(Book& b, int numOrders){
 int main(){
     std::vector<long long> matchTimes;
 
-    const int numMarketOrders = 50'000;
-    const int numLimitOrders = 500'000; //Prevent liquidity running out, that would be near instant matches
+    const int numMarketOrders = 10'000'000;
+    const int numLimitOrders = 20'000'000; //Prevent liquidity running out, that would be near instant matches
 
 
     matchTimes.reserve(numMarketOrders);

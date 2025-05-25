@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -g -fno-omit-frame-pointer CMakeFiles/orderTests.dir/structures/testOrder.cpp.o CMakeFiles/orderTests.dir/structures/testBook.cpp.o CMakeFiles/orderTests.dir/structures/testRing.cpp.o CMakeFiles/orderTests.dir/structures/testThreads.cpp.o -o orderTests  ../src/liborderBook.a ../_deps/catch2-build/src/libCatch2Main.a ../_deps/catch2-build/src/libCatch2.a 
