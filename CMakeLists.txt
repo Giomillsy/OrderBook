@@ -9,12 +9,8 @@ endif()
 # C++ standard
 set(CMAKE_CXX_STANDARD 23)
 
-# Force non-PIE for perf to work properly
-set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
-
 # Apply non-PIE and frame pointer flags globally
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-no-pie")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g -fno-omit-frame-pointer -fno-pie")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g -fno-omit-frame-pointer")
 set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 
 # Enable testing

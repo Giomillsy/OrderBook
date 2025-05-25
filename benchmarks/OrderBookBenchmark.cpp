@@ -2,8 +2,11 @@
 #include <vector>
 #include <chrono>
 #include <random>
+#include <thread>
+
 #include "structures/Book.h" 
 #include "structures/Order.h"
+#include "structures/SpscQ.h"
 
 int getRandInt(std::mt19937& gen,int topBound){
     
@@ -19,56 +22,106 @@ void addLimits(Book& b, int numOrders){
     std::random_device rd;
     std::mt19937 gen(rd());
 
+    std::bernoulli_distribution coinFlip(0.5);
+
 
     for (int i = 0;i<numOrders;i++){
 
         int randInt = getRandInt(gen,1'000'000);
         int randQty = getRandInt(gen,1'000'000);
-        Order o = {i,Side::SELL,OrderType::LIMIT,randQty,static_cast<double>(randInt)};
+
+        //Decide  if order is sell or buy
+        Side side;
+        if (coinFlip(gen)){side = Side::SELL;}
+        else {side  = Side::BUY;}
+
+        Order o = {i,side,OrderType::LIMIT,randQty,static_cast<double>(randInt)};
         b.addOrder(o);
     }
 
+
 }
 
-int main(){
-    std::vector<long long> matchTimes;
-
-    const int numMarketOrders = 10'000'000;
-    const int numLimitOrders = 20'000'000; //Prevent liquidity running out, that would be near instant matches
-
-
-    matchTimes.reserve(numMarketOrders);
-
-    //Fill the book with limit orders 100k random orders on both sides
-    Book b;
-    addLimits(b,numLimitOrders);
-
+std::vector<Order> makeOrders(const int numOrders){
     //Generate random key
     std::random_device rd;
     std::mt19937 gen(rd());
 
+    std::bernoulli_distribution coinFlip(0.5);
 
-    //Get randquantities for market ordrs
-    std::vector<int> mQtys;
-    mQtys.reserve(numMarketOrders);
-    for (int i = 0;i<numMarketOrders;i++){
-        mQtys.push_back(getRandInt(gen,1'000'000));
+    std::vector<Order> randOrders(numOrders);
+
+    for (int i = 0;i<numOrders;i++) {
+        Side side;
+        OrderType ot;
+        int randQty = static_cast<double>(getRandInt(gen,1'000'000));
+
+        //Pick order type
+        if (coinFlip(gen)){ot = OrderType::LIMIT;}
+        else {ot = OrderType::MARKET;}
+
+        if (coinFlip(gen)){side = Side::SELL;}
+        else {side  = Side::BUY;}
+
+        //If it's Limit it needs a price
+        Order o;
+        if (ot == OrderType::LIMIT) {
+            auto prc = static_cast<double>(getRandInt(gen,1'000'000));
+            o = {i,side,ot,randQty,prc};
+        }else {
+            o = {i,side,ot,randQty};
+        }
+
+        randOrders[i] = o;
+
     }
 
+    return randOrders;
 
-    auto startBenchmark =   std::
-        chrono::high_resolution_clock::now();
-    for (int i = 0;i<numMarketOrders;i++){
-        auto startMatch = std::chrono::high_resolution_clock::now();
-        Order o = {i+numLimitOrders,Side::BUY,OrderType::MARKET,mQtys[i]};
-        b.addOrder(o);
-        auto endMatch = std::chrono::high_resolution_clock::now();
+}
+int main(){
 
-        matchTimes.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(endMatch - startMatch).count());        
-    }
+    const int numOrders = 100'000'000;
+    const int startingLimits = 1'000'000; //Intial number of orders in the book
 
-    auto endBenchmark =   std::
-        chrono::high_resolution_clock::now();
+    //Put some intial limit orders in the book, some of these will instantly cross the book
+    Book b;
+    addLimits(b,startingLimits);
+
+    //Make a vector of orders to be added
+    std::vector<Order> orders = makeOrders(numOrders);
+
+    //Setup SpscQ buffer
+    constexpr int buffSize = 65536;
+    SpscQ<Order,buffSize> sq;
+
+    auto startBench = std::chrono::high_resolution_clock::now();
+    //Producer thread
+    std::jthread producer([&] {
+        for (int i = 0;i<numOrders;i++) {
+            while (!sq.push(orders[i])){}
+        }
+    });
+
+    //Consumer thread
+    std::jthread consumer([&] {
+        int count = 0;
+        while (count < 1'000) {
+            auto popped = sq.pop();
+            if (popped.has_value()) {
+                count = 0;
+                b.addOrder(popped.value());
+            }else{count++;}
+        }
+    });
+
+    producer.join();
+    consumer.join();
+    auto endBench = std::chrono::high_resolution_clock::now();
+    auto totTime = std::chrono::duration_cast<std::chrono::milliseconds>(endBench-startBench).count();
+    std::cout << "Producer took " << totTime << " ms." << std::endl;
+    /*
+    //Calculate Performance statistics
 
     //Calculate Average
     long long total = std::accumulate(matchTimes.begin(), matchTimes.end(), 0LL);
@@ -85,6 +138,6 @@ int main(){
     std::cout << "Average Match Latency: " << averageNs << " ns\n";
     std::cout << "P99 Match Latency: " << p99Ns << " ns\n";
     std::cout << "Throughput: " << throughput << " matches/sec\n";
-
+    */
 
 }

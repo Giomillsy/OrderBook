@@ -6,6 +6,7 @@
 #include <array>
 #include <optional>
 #include <cstddef>
+#include <iostream>
 #include <atomic>
 
 template<typename, std::size_t>
@@ -26,7 +27,9 @@ class Ring {
     bool push(const O& o) {
         //Pushes an Order to the buffer
         const size_t next = (tail + 1) % N;
-        if (next == head){return false;}
+        if (next == head) {
+            return false;
+        }
         buffer[tail] = o;
         tail = next;
         return true;
