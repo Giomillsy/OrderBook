@@ -1,15 +1,16 @@
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include <chrono>
 #include <random>
 #include <thread>
 
-#include "structures/Book.h" 
+#include "structures/Book.h"
 #include "structures/Order.h"
 #include "structures/SpscQ.h"
 
 int getRandInt(std::mt19937& gen,int topBound){
-    
+
     //Range of prices
     std::uniform_int_distribution<int> dist(1,topBound);
     return dist(gen);
@@ -95,11 +96,21 @@ int main(){
     constexpr int buffSize = 65536;
     SpscQ<Order,buffSize> sq;
 
-    auto startBench = std::chrono::high_resolution_clock::now();
+    //Init the Vector to store Benchmark times, by id.
+    // 0 Represents the Order was not executed    // Vector rather than array due to being too big to go in cache
+    using Clock = std::chrono::time_point<std::chrono::high_resolution_clock>;
+    std::vector<Clock> startTimes(numOrders); //Only prodcuer accesses
+    std::vector<Clock> endTimes(numOrders); // Only consumer accesses
+    std::vector<long long> matchTimes(numOrders);
+
+
+    Clock startBench = std::chrono::high_resolution_clock::now();
     //Producer thread
     std::jthread producer([&] {
         for (int i = 0;i<numOrders;i++) {
             while (!sq.push(orders[i])){}
+            Clock insertTime = std::chrono::high_resolution_clock::now();
+            startTimes[i] = insertTime;
         }
     });
 
@@ -110,7 +121,9 @@ int main(){
             auto popped = sq.pop();
             if (popped.has_value()) {
                 count = 0;
-                b.addOrder(popped.value());
+                Order o = popped.value();
+                b.addOrder(o);
+                endTimes[o.getID()] = std::chrono::high_resolution_clock::now();
             }else{count++;}
         }
     });
@@ -118,26 +131,33 @@ int main(){
     producer.join();
     consumer.join();
     auto endBench = std::chrono::high_resolution_clock::now();
-    auto totTime = std::chrono::duration_cast<std::chrono::milliseconds>(endBench-startBench).count();
-    std::cout << "Producer took " << totTime << " ms." << std::endl;
-    /*
-    //Calculate Performance statistics
 
-    //Calculate Average
+    // Calculate latencies
+    for (int i = 0;i<numOrders;i++) {
+        if (endTimes[i] == Clock{}) {
+            continue;
+        }
+        matchTimes[i] = std::chrono::duration_cast<std::chrono::nanoseconds>(endTimes[i] - startTimes[i]).count();
+    }
+
+    // Calculate Performance statistics
+
+    // Calculate Average
     long long total = std::accumulate(matchTimes.begin(), matchTimes.end(), 0LL);
-    double averageNs = static_cast<double>(total) / matchTimes.size();
-    
+    double averageNs = static_cast<double>(total) / (matchTimes.size()* 1'000'000);
+
     // Calculate P99
     std::sort(matchTimes.begin(), matchTimes.end());
-    double p99Ns = matchTimes[static_cast<size_t>(0.99 * matchTimes.size())];
-    
+    double p99Ns = matchTimes[static_cast<size_t>(0.99 * matchTimes.size())]/1'000'000;
+
     // Throughput
-    double totalBenchmarkNs = std::chrono::duration_cast<std::chrono::nanoseconds>(endBenchmark - startBenchmark).count();
+    double totalBenchmarkNs = std::chrono::duration_cast<std::chrono::nanoseconds>(endBench - startBench).count();
     double throughput = (matchTimes.size() * 1'000'000'000.0) / totalBenchmarkNs; // matches per second
-    
-    std::cout << "Average Match Latency: " << averageNs << " ns\n";
-    std::cout << "P99 Match Latency: " << p99Ns << " ns\n";
+
+    // Print without scientific notation    std::cout << std::fixed << std::setprecision(2); // control number formatting
+    std::cout << "Average Match Latency: " << averageNs << " ms\n";
+    std::cout << "P99 Match Latency: " << p99Ns << " ms\n";
     std::cout << "Throughput: " << throughput << " matches/sec\n";
-    */
+
 
 }

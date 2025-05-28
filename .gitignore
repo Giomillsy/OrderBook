@@ -5,3 +5,4 @@
 #Whole directories
 /.vscode
 build/
+cmake-build-debug/
