@@ -2,6 +2,9 @@
 #Executables
 *.exe
 
+#Jet Brains IDE misc
+.idea/
+
 #Whole directories
 /.vscode
 build/

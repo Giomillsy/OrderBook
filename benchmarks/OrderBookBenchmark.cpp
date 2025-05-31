@@ -93,7 +93,7 @@ int main(){
     std::vector<Order> orders = makeOrders(numOrders);
 
     //Setup SpscQ buffer
-    constexpr int buffSize = 65536;
+    constexpr int buffSize = 16'384;
     SpscQ<Order,buffSize> sq;
 
     //Init the Vector to store Benchmark times, by id.
@@ -144,19 +144,19 @@ int main(){
 
     // Calculate Average
     long long total = std::accumulate(matchTimes.begin(), matchTimes.end(), 0LL);
-    double averageNs = static_cast<double>(total) / (matchTimes.size()* 1'000'000);
+    double averageNs = static_cast<double>(total) / (matchTimes.size()* 1'000);
 
     // Calculate P99
     std::sort(matchTimes.begin(), matchTimes.end());
-    double p99Ns = matchTimes[static_cast<size_t>(0.99 * matchTimes.size())]/1'000'000;
+    double p99Ns = matchTimes[static_cast<size_t>(0.99 * matchTimes.size())]/1'000;
 
     // Throughput
     double totalBenchmarkNs = std::chrono::duration_cast<std::chrono::nanoseconds>(endBench - startBench).count();
     double throughput = (matchTimes.size() * 1'000'000'000.0) / totalBenchmarkNs; // matches per second
 
     // Print without scientific notation    std::cout << std::fixed << std::setprecision(2); // control number formatting
-    std::cout << "Average Match Latency: " << averageNs << " ms\n";
-    std::cout << "P99 Match Latency: " << p99Ns << " ms\n";
+    std::cout << "Average Match Latency: " << averageNs << " μs\n";
+    std::cout << "P99 Match Latency: " << p99Ns << " μs\n";
     std::cout << "Throughput: " << throughput << " matches/sec\n";
 
 
