@@ -5,7 +5,6 @@ add_executable(bookBenchmark
         ${PROJECT_SOURCE_DIR}/src/structures/Order.cpp
 )
 
-#
 target_include_directories(bookBenchmark PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 # Perf tuning flags for this target only

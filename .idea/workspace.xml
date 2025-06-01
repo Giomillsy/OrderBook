@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="BackendCodeEditorMiscSettings">
-    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="7" type="long" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="4" type="long" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
     <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
@@ -34,8 +34,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9d321cb6-2448-4733-868b-37d134ebc130" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/benchmarks/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/benchmarks/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/benchmarks/OrderBookBenchmark.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/benchmarks/OrderBookBenchmark.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/structures/Book.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/Book.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/structures/Book.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/Book.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/structures/Order.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/Order.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/structures/Order.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/structures/Ring.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/structures/SpscQ.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/structures/testBook.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testBook.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -257,8 +267,8 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;ctest.advertisement.all.test.configuration.is.created&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;spscQ&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/gio/Documents/Projects/OrderBook/CMakeLists.txt&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/gio/Documents/Projects/OrderBook&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -269,7 +279,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Catch.orderTests">
+  <component name="RunManager" selected="CMake Application.bookBenchmark">
     <configuration name="orderTests" type="CMakeCatchTestRunConfigurationType" factoryName="Catch Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OrderBookProject" TARGET_NAME="orderTests" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="OrderBookProject" RUN_TARGET_NAME="orderTests" TEST_MODE="SUITE_TEST">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -327,6 +337,7 @@
       <workItem from="1748169320110" duration="988000" />
       <workItem from="1748170514493" duration="836000" />
       <workItem from="1748193097893" duration="4777000" />
+      <workItem from="1748723979656" duration="6300000" />
     </task>
     <servers />
   </component>

@@ -3,7 +3,7 @@
 #ifndef SPSCQ_H
 #define SPSCQ_H
 
-#include "Ring.h"
+#include "Ring.hpp"
 #include <optional>
 
 template<typename O, size_t N>

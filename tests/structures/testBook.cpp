@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_USE_APPROX
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
-#include "structures/Book.h" 
+#include "structures/Book.hpp" 
 #include "structures/Order.h"
 
 //These tests only aim to test the methods and attributes of the Book class function correctly. They do not aim to catch underlying malfunctions in sub-classes such as the Order class. Those should be captured elsewhere.

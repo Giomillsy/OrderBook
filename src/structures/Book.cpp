@@ -1,5 +1,5 @@
 
-#include "Book.h"
+#include "Book.hpp"
 #include <variant>
 
 void Book::addOrder(Order& o){
@@ -60,7 +60,7 @@ void Book::showLimit(const  std::map<double, std::deque<Order>,Comparator>& limi
 void Book::marketMatch(Order& o){
     //Matches a market order with an order in the limit book
 
-    //Holds multiple types solves the maps being functionally similar but semtically the different
+    //Holds multiple types solves the maps being functionally similar but semantically the different
     using LimitMapVariant = std::variant<LimitBuyMap*, LimitSellMap*>;
     LimitMapVariant limitMap;
 
