@@ -1,7 +1,7 @@
 // Unit tests for the SpscQ and Ring class, to test core functionality
 
-#include "structures/SpscQ.h"
-#include "structures/Order.h"
+#include "structures/SpscQ.hpp"
+#include "structures/Order.hpp"
 #include "TestHelpers.h"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>

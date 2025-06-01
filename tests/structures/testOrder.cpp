@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_USE_APPROX
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
-#include "structures/Order.h"
+#include "structures/Order.hpp"
 #include "TestHelpers.h"
 
 TEST_CASE("Basic Order Construction", "[Order]") {

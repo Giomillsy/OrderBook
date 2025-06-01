@@ -3,54 +3,53 @@
 #include <variant>
 
 void Book::addOrder(Order& o){
-    //Adds an order to the book class
+    // Adds an Order to the Order Book.
+    // Limit orders, either go into the book or instantly cross
+    // Market orders, either are rejected (no liquidity) or are executed
     
     switch (o.orderType){
     case (OrderType::MARKET):
-        //Market order to match
+        //Market order, needs to be executed immediately
 
         this->marketMatch(o);
         o.notify();
         return;    
     case OrderType::LIMIT:
-        // Add order to queue based on price    
+        // Limit order, needs to either instantly cross the book or be added
 
-        // Attempt to cross the order before it's added
-        this->marketMatch(o);
-        if (o.unexecQuantity != 0){
+        this->marketMatch(o); // Attempts to cross the book
+        if (o.unexecQuantity != 0) {
+            // Didn't cross the book
             switch (o.side){
-            case Side::SELL:
-                limitSell[o.tgtPrice].push_back(o);
-                break;
-            case Side::BUY:
-                limitBuy[o.tgtPrice].push_back(o);
-                break;
+                case Side::SELL:
+                    limitSell[o.tgtPrice].push_back(o);
+                    break;
+                case Side::BUY:
+                    limitBuy[o.tgtPrice].push_back(o);
+                    break;
             }
         }
-        return;
-
     }
 }
 
 void Book::showOrders(){
-    //Prints the current limit orders in the book
+    // Mainly for debugging
+    //Prints the current limit orders in the book to terminal
 
     std::cout << "Limit Orders Sell:\n";
-    Book::showLimit(limitSell);
+    showLimit(limitSell);
     std::cout << "Limit Orders Buy:\n";
-    Book::showLimit(limitBuy);
-
-    
+    showLimit(limitBuy);
 
 }
 
 template <typename Comparator>
 void Book::showLimit(const  std::map<double, std::deque<Order>,Comparator>& limitBook){
+    //Mainly for debugging
     //Prints one side of the limit book to console
 
     std::cout << "ID\t\tPrice\t\tSize\n";
     for (const auto& [price, orders] : limitBook) {
-        int totalSize = 0;
         for (auto& order : orders) {
             std::cout << order.orderID<< "\t\t" << order.tgtPrice << "\t\t" << order.unexecQuantity << "\n";
         }
@@ -58,14 +57,15 @@ void Book::showLimit(const  std::map<double, std::deque<Order>,Comparator>& limi
 }
 
 void Book::marketMatch(Order& o){
-    //Matches a market order with an order in the limit book
+    //Two main flows of logic
+    //  - Matches a market order with a limit order
+    //  - tries to match two limit orders, if it doesn't skip forward
 
-    //Holds multiple types solves the maps being functionally similar but semantically the different
+    //LimitBuyMap and LimitSellMap are functionally similar but semantically the different. Perfect for variant
     using LimitMapVariant = std::variant<LimitBuyMap*, LimitSellMap*>;
     LimitMapVariant limitMap;
 
-
-    //Gets the relevant side of the limit book
+    //Finds the relevant side of the limit book
     switch (o.side){
     case Side::SELL:
         limitMap = &limitBuy;
@@ -77,41 +77,41 @@ void Book::marketMatch(Order& o){
 
     //Visit safely gets the type being used in the variant
     std::visit([&o](auto& lMap){
-        int qtyToExec = 0;
 
-        //Iterates through the map
+        //Iterates through the different prices
         for (auto it = lMap -> begin(); it != lMap -> end(); ){
-            auto& orderDeque = it->second; 
+            auto& orderDeque = it -> second;
 
 
-            //Iterates through the deque and removes limit orders as fully executed
+            //Iterates through the orders at the price level, removing as them as they're filled
             for (auto orderIt = orderDeque.begin(); orderIt != orderDeque.end();){
-                auto& l = *orderIt;
+                auto& limit = *orderIt;
 
-                // Checks if it can cross the book instantly
+                // Checks if it can cross the book instantly (for limit orders)
                 bool canCross;
                 switch (o.side){
                 case Side::BUY:
-                    canCross = o.tgtPrice>l.tgtPrice;
+                    canCross = o.tgtPrice >= limit.tgtPrice;
                     break;
                 case Side::SELL:
-                    canCross = o.tgtPrice<l.tgtPrice;
+                    canCross = o.tgtPrice <= limit.tgtPrice;
                     break;
                 default:
                     throw std::logic_error("Invalid Input: Wasn't buy or sell in side");
                 }
 
-                //If it can't cross the Book, the execution fails. All market orders cross with arbitarily high or low tgtPrices
+                //If it can't cross the Book, the execution fails.
+                //All market orders cross since they have arbitrarily high or low tgtPrices
                 if (!canCross){return;}
 
                 // Amount of quantity that can be executed with this limit order
-                int qtyToExec = std::min(o.unexecQuantity,l.unexecQuantity);
-                l.exec(qtyToExec,it->first);
-                o.exec(qtyToExec,it->first);
+                int qtyToExec = std::min(o.unexecQuantity,limit.unexecQuantity);
+                limit.exec(qtyToExec,it -> first);
+                o.exec(qtyToExec,it -> first);
 
                 //If the limit order full executed, it needs to be removed
-                // Or the itterator needs to go forward one
-                if (l.unexecQuantity == 0) {
+                // Or the iterator needs to go forward one
+                if (limit.unexecQuantity == 0) {
                     orderIt = orderDeque.erase(orderIt);
                 } else {
                     ++orderIt;
@@ -121,19 +121,13 @@ void Book::marketMatch(Order& o){
                 if (o.unexecQuantity == 0) return;
             }    
 
-            //If the deque is empty, remove the price level
+            //If no more orders at price level, remove the price level
             if (orderDeque.empty()) {
                 it = lMap -> erase(it);
             } else {
                 ++it;
-            }        
-        
-        
+            }
         }
-
         // Failed execution. Liquidity exhausted
-       
-        return;
     },limitMap);
-
 }
