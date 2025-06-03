@@ -1,11 +1,7 @@
-#ifndef ORDER_H  
-#define ORDER_H
+#pragma once
 
 #include <iostream>
 #include <chrono>
-#include <queue>
-#include <map>
-#include <set>
 
 enum class Side{
     //Whether the instrument is being bought or sold
@@ -36,9 +32,9 @@ private:
     int unexecQuantity;
 
 
-    static long long getCurrentTimestamp();
+    static long long getCurrentTimestamp() noexcept;
 
-    static double roundToTickSize(double price);
+    static double roundToTickSize(double price) noexcept;
 
     virtual void exec(int qty, double p);
 
@@ -60,16 +56,14 @@ public:
     Order(int id, Side s, OrderType type,
         int tgtQ, double tgtPrice = 0.0);
 
-    [[nodiscard]] int getPrice() const;
-
-    [[nodiscard]] int getUnexecQty() const;
-
-    [[nodiscard]] int getID() const;
+    // Getters
+    [[nodiscard]] double getPrice() const noexcept;
+    [[nodiscard]] int getUnexecQty() const noexcept;
+    [[nodiscard]] int getID() const noexcept;
         
     //Prints for debugging
-    void printOrder() const;
+    void printOrder() const noexcept;
 
 };
 
-#endif
 

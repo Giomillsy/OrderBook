@@ -1,5 +1,4 @@
-#ifndef BOOK_H  
-#define BOOK_H
+#pragma once
 
 #include <map>
 #include <queue>
@@ -39,5 +38,3 @@ public:
     void showOrders(); // Prints orders on both side of the book
     
 };
-
-#endif

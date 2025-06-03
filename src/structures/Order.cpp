@@ -1,4 +1,5 @@
 #include "Order.hpp"
+
 #include <chrono>
 #include <cmath>
 #include <map>
@@ -6,19 +7,24 @@
 #include <limits>
 
 
-long long Order::getCurrentTimestamp(){
+long long Order::getCurrentTimestamp() noexcept {
+    // Returns the current time, using chrono
+
     using namespace std::chrono;
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
-double Order::roundToTickSize(double price){
+double Order::roundToTickSize(const double price) noexcept {
+    // Used to round all order prices to the nearest tick, defined by tick size
+
     return std::round(price/tickSize)*tickSize;
 }
 
 void Order::exec(int qty, double prc){
     /* 3 flows:
-    - Final execution that fully fills the rest of the order
+    - Final execution that fully fills the rest with the order
     - Partial exec
+    - Error caught
     */
 
 
@@ -36,18 +42,17 @@ void Order::exec(int qty, double prc){
         throw std::logic_error("Invalid Input: Quantity to be executed greater than oustanding quantity");
     }
 
-    // Finds the cost of the execution
-    double newValue = (execPrice*execQuantity)+(prc*qty);
+    // Finds the value/quantity of the orders executed
+    const double newValue = (execPrice*execQuantity)+(prc*qty);
     execPrice = newValue/(execQuantity+qty);
     execQuantity += qty;
     unexecQuantity -= qty;
 
-
+    //Checking if this is the final exec, which means communication needed
     if (unexecQuantity == 0 && orderType == OrderType::LIMIT){
-        //Checking if this is the final exec, which means communication needed
+        // If it's a fully executed order, notify the person who placed the order
         this->notify();
     }
-    return;
 
 }
 
@@ -60,40 +65,34 @@ void Order::notify() const{
     For now it does nothing
     */
 
-
-    return;
-
-
 }
 
-// Constructor with optional values
-Order::Order(int id, Side s, OrderType type,
-        int tgtQ, double tgtP)
-    : orderID(id), 
+// Constructor
+Order::Order(const int id, const Side s, const OrderType type,
+        const int tgtQ,const double tgtP)
+    : orderType(type),
     side(s),
-    orderType(type),
-    tgtQuantity(tgtQ), 
-    tgtPrice(Order::roundToTickSize(tgtP)),
+    tgtPrice(roundToTickSize(tgtP)),
     execPrice(0),
+    timestamp(getCurrentTimestamp()),
+    orderID(id),
+    tgtQuantity(tgtQ),
     execQuantity(0),
-    unexecQuantity(tgtQ),
-    timestamp(Order::getCurrentTimestamp()){
+    unexecQuantity(tgtQ){
         if (type == OrderType::MARKET){
-            //Makes it always match at all prices
+            //Market orders provide liquidity at all prices, this ensures that
             if (s == Side::BUY){tgtPrice = std::numeric_limits<double>::max();}
             if (s == Side::SELL){tgtPrice = -std::numeric_limits<double>::max();}
         }
     }
 
+//Getters
+double Order::getPrice() const noexcept {return tgtPrice;}
+int Order::getUnexecQty() const noexcept {return unexecQuantity;}
+int Order::getID() const noexcept {return orderID;}
 
-int Order::getPrice() const {return tgtPrice;}
-
-int Order::getUnexecQty() const {return unexecQuantity;}
-
-int Order::getID() const {return orderID;}
-
-void Order::printOrder() const {
-    //Prints the order for debugging
+//Prints the order for debugging
+void Order::printOrder() const noexcept{
 
     std::cout << "OrderID: " << orderID << "\n"
               << "Side: " << (side == Side::BUY ? "Buy" : "Sell") << "\n"
