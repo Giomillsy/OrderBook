@@ -35,8 +35,11 @@
   <component name="ChangeListManager">
     <list default="true" id="9d321cb6-2448-4733-868b-37d134ebc130" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/structures/Ring.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/Ring.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/structures/SpscQ.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/SpscQ.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/structures/TestHelpers.h" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/TestHelpers.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/structures/testBook.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testBook.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/structures/testOrder.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testOrder.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/structures/testRing.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testRing.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/structures/testThreads.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testThreads.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,6 +249,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "CMake Application.bookBenchmark.executor": "Run",
+    "Catch.addOrder: Limit Order added.executor": "Run",
     "Catch.orderTests.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.RadMigrateCodeStyle": "true",
@@ -270,7 +274,13 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="CMake Application.bookBenchmark">
+  <component name="RunManager" selected="Catch.addOrder: Limit Order added">
+    <configuration name="addOrder: Limit Order added" type="CMakeCatchTestRunConfigurationType" factoryName="Catch Test" temporary="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OrderBookProject" TARGET_NAME="orderTests" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="OrderBookProject" RUN_TARGET_NAME="orderTests" TEST_CLASS="[book]" TEST_METHOD="addOrder: Limit Order added" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="orderTests" type="CMakeCatchTestRunConfigurationType" factoryName="Catch Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OrderBookProject" TARGET_NAME="orderTests" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="OrderBookProject" RUN_TARGET_NAME="orderTests" TEST_MODE="SUITE_TEST">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -300,11 +310,17 @@
     </configuration>
     <list>
       <item itemvalue="Catch.orderTests" />
+      <item itemvalue="Catch.addOrder: Limit Order added" />
       <item itemvalue="CMake Application.Catch2WithMain" />
       <item itemvalue="CMake Application.Catch2" />
       <item itemvalue="CMake Application.bookBenchmark" />
       <item itemvalue="CTest Application.All CTest" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Catch.addOrder: Limit Order added" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -331,7 +347,7 @@
       <workItem from="1748723979656" duration="6300000" />
       <workItem from="1748801562514" duration="3594000" />
       <workItem from="1748814576153" duration="1282000" />
-      <workItem from="1748969055168" duration="5874000" />
+      <workItem from="1748969055168" duration="9172000" />
     </task>
     <servers />
   </component>

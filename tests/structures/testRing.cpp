@@ -1,12 +1,13 @@
-// Unit tests for the SpscQ and Ring class, to test core functionality
+// Unit tests for the SpscQ and Ring class — validating core ring buffer functionality
 
 #include "structures/SpscQ.hpp"
 #include "structures/Order.hpp"
 #include "TestHelpers.h"
+
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
-TEST_CASE("push: Add order (no wrap)"){
+TEST_CASE("push: adds order without wrap", "[Ring]"){
     Ring<Order,10> r;
     using TRH = TestRingHelper<Order,10>;
     using OTH = OrderTestHelper;
@@ -19,7 +20,7 @@ TEST_CASE("push: Add order (no wrap)"){
     REQUIRE(TRH::getTail(r) == 1);
 }
 
-TEST_CASE("push: Add order (full)"){
+TEST_CASE("push: fails when buffer is full", "[Ring]"){
     Ring<Order,1> r;
     using TRH = TestRingHelper<Order,1>;
 
@@ -29,7 +30,7 @@ TEST_CASE("push: Add order (full)"){
     REQUIRE(!TRH::doPush(r,o));
 }
 
-TEST_CASE("push(): Add Order (wrap around)"){
+TEST_CASE("push: handles wrap-around correctly", "[Ring]"){
     Ring<Order,3> r;
     using TRH = TestRingHelper<Order,3>;
 
@@ -44,7 +45,7 @@ TEST_CASE("push(): Add Order (wrap around)"){
     REQUIRE(TRH::getTail(r) == 0);
 }
 
-TEST_CASE("pop: Remove order (no wrap)") {
+TEST_CASE("pop: removes order without wrap", "[Ring]") {
     Ring<Order,10> r;
     using TRH = TestRingHelper<Order,10>;
     using OTH = OrderTestHelper;
@@ -61,7 +62,7 @@ TEST_CASE("pop: Remove order (no wrap)") {
     REQUIRE(TRH::getHead(r) == 1);
 }
 
-TEST_CASE("pop: Remove order (wrap around)") {
+TEST_CASE("pop: removes order with wrap-around", "[Ring]") {
     Ring<Order,10> r;
     using TRH = TestRingHelper<Order,10>;
     using OTH = OrderTestHelper;
@@ -77,7 +78,7 @@ TEST_CASE("pop: Remove order (wrap around)") {
     REQUIRE(TRH::getHead(r) == 0);
 }
 
-TEST_CASE("pop: Remove order (empty buffer)") {
+TEST_CASE("pop: Remove order (empty buffer)", "[Ring]") {
     Ring<Order,10> r;
     using TRH = TestRingHelper<Order,10>;
 
@@ -85,7 +86,7 @@ TEST_CASE("pop: Remove order (empty buffer)") {
     REQUIRE(!popped.has_value());
 }
 
-TEST_CASE("Ring edge cases: zero and one slot capacity") {
+TEST_CASE("Ring edge cases: behaves correctly with size-1 and size-2 ring","[Ring]") {
     using TRH1 = TestRingHelper<Order, 1>;
     using TRH2 = TestRingHelper<Order, 2>;
     using OTH = OrderTestHelper;

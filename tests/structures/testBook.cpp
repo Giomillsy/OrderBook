@@ -1,11 +1,13 @@
 #define CATCH_CONFIG_USE_APPROX
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
+
 #include "structures/Book.hpp" 
 #include "structures/Order.hpp"
 
 //These tests only aim to test the methods and attributes of the Book class function correctly. They do not aim to catch underlying malfunctions in sub-classes such as the Order class. Those should be captured elsewhere.
 
+//Testing class, to override Book internals
 class TestBook: public Book{
 public:
     bool isMarketMatchCalled = false;
@@ -15,6 +17,7 @@ public:
     }
 };
 
+//Testing class, to override Order internals
 class TestOrder: public Order{
 public:
     mutable bool isNotified = false;
@@ -37,6 +40,7 @@ public:
     }
 };
 
+// Helper class to provide access to the internals of Book, retaining encapsulation
 struct BookTestHelper{
     //Getters
     static std::map<double,std::deque<Order>,std::less<>>&  limitSell(Book& b){return b.limitSell;}
@@ -47,9 +51,7 @@ struct BookTestHelper{
 };
 
 
-
-//addOrder tests
-
+//Happy path test - Add Limit order
 TEST_CASE("addOrder: Limit Order added","[Book]"){
     TestBook b;
     
@@ -61,6 +63,7 @@ TEST_CASE("addOrder: Limit Order added","[Book]"){
     
 }
 
+//Happy path test - Add Market order
 TEST_CASE("addOrder: Market Order Added","[Book]"){
     TestBook b;
     
@@ -74,9 +77,9 @@ TEST_CASE("addOrder: Market Order Added","[Book]"){
 
 
 
-//marketMatch tests
-//Remeber we can only test for our injected class, if anything in the functions
-//uses Order or Book, it won't have the testing side effects.
+
+// These tests only validate high-level Book behavior assuming correct Order functionality.
+// Order-specific behavior (e.g., exec logic) is covered in separate Order unit tests.
 TEST_CASE("marketMatch: Standard full market match","[Book]"){
     Book b;
 
@@ -92,6 +95,7 @@ TEST_CASE("marketMatch: Standard full market match","[Book]"){
     REQUIRE(BookTestHelper::limitSell(b)[5.0].empty());
 }
 
+//Happy path test - Market order isn't fully executed (no liquidity)
 TEST_CASE("marketMatch: Partial market match","[Book]"){
     Book b;
 
@@ -109,6 +113,7 @@ TEST_CASE("marketMatch: Partial market match","[Book]"){
     
 }
 
+//Happy path test - Test book is ordering by price
 TEST_CASE("marketMatch: Price priority","[Book]"){
     Book b;
 
@@ -129,6 +134,7 @@ TEST_CASE("marketMatch: Price priority","[Book]"){
 
 }
 
+//Happy path test - Test book is ordering by time inside price levels
 TEST_CASE("marketMatch: Time priority","[Book]"){
     Book b;
 
@@ -143,7 +149,6 @@ TEST_CASE("marketMatch: Time priority","[Book]"){
     b.addOrder(so1);
 
     REQUIRE(BookTestHelper::limitBuy(b)[5].front().getID() == 2);
-
 
 }
 

@@ -1,10 +1,14 @@
-// Structs to help me get private attributes for unit testing
+// Helper structs to access private members of Order and Ring for unit testing.
+// These should only be used in test environments to avoid violating encapsulation in production code.
+
 
 #ifndef TESTHELPERS_H
 #define TESTHELPERS_H
 
 #include <optional>
 
+// Provides access to private fields and functions of the Order class
+// Used to check for internal state changes during unit testing
 class OrderTestHelper {
 public:
     //Getters
@@ -36,7 +40,7 @@ public:
     //Setters
     static void setHead(Ring<O, N>& r, std::size_t h) { r.head = h; }
     static void setTail(Ring<O, N>& r, std::size_t t) { r.tail = t; }
-    static void setBuffer(Ring<O, N>& r, Order& o, int pos) { r.buffer[pos] = o; }
+    static void setBuffer(Ring<O, N>& r, Order& o, size_t pos) { r.buffer[pos] = o; }
 
     static bool doPush(Ring<O, N>& r,Order& o) {return r.push(o); }
     static std::optional<O> doPop(Ring<O, N>& r) { return r.pop(); }
