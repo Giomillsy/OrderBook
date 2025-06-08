@@ -35,11 +35,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9d321cb6-2448-4733-868b-37d134ebc130" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/structures/TestHelpers.h" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/TestHelpers.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/structures/testBook.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testBook.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/structures/testOrder.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testOrder.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/structures/testRing.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testRing.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/structures/testThreads.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/structures/testThreads.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,7 +257,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "ctest.advertisement.all.test.configuration.is.created": "true",
-    "git-widget-placeholder": "tidy",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "/home/gio/Documents/Projects/OrderBook",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -347,7 +342,7 @@
       <workItem from="1748723979656" duration="6300000" />
       <workItem from="1748801562514" duration="3594000" />
       <workItem from="1748814576153" duration="1282000" />
-      <workItem from="1748969055168" duration="9172000" />
+      <workItem from="1748969055168" duration="9911000" />
     </task>
     <servers />
   </component>
