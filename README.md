@@ -1,6 +1,8 @@
 
 # OrderBook - Low-Latency Matching Engine in C++
 
+![CI](https://github.com/Giomillsy/OrderBook/actions/workflows/ci.yaml/badge.svg)
+
 > High-performance C++23 order book for simulated trading.  
 > Executes core matching logic in **~97ns** (p99 = **560ns**), scaling to **8.5M matches/sec** with flamegraph-guided optimizations.  
 > Built with a custom **lock-free SPSC queue** for concurrent order ingestion, validated under load with ASAN/TSAN, and benchmarked across 100M+ orders.
