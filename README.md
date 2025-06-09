@@ -127,6 +127,12 @@ A full performance test harness measures mean and p99 latency as well as sustain
 	Install via:
 	- Ubuntu/Debian: `sudo apt install libtsan0`
 	- RHEL/Fedora: `sudo dnf install libtsan`
+ - **libasan** (for AddressSanitizer support)  
+  Required only when building with `-DENABLE_ASAN=ON`  
+  Install via:
+  - Ubuntu/Debian: `sudo apt install libasan`
+  - RHEL/Fedora: `sudo dnf install libasan`  
+    *(you may need a versioned package like `libasan8` if using GCC 13+)*
 
 ### Clone and Configure
 
@@ -144,9 +150,10 @@ make -j$(nproc)
 ```
     
 This builds all targets, including:
-- `OrderBookBenchmarks` – benchmark executable for latency & throughput
-- `OrderBookTests` – unit tests built with Catch2
-- `OrderBookMain` – main binary (optional integration wrapper)
+- `bookBenchmark` – benchmark executable for latency & throughput
+- `orderTests` – unit tests built with Catch2
+- `orderBook` – main binary (optional integration wrapper)
+  
 ### Build with Sanitizers (Debug + ASAN/TSAN)
 
 ```bash
@@ -156,8 +163,12 @@ cmake -DENABLE_ASAN=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 # and
 make -j$(nproc)
-./orderTests
 ```
+This builds all targets, including:
+
+- bookBenchmark – benchmark executable for latency & throughput (in build/benchmarks/)
+- orderTests – unit tests built with Catch2 (in build/tests/)
+- OrderBook – main binary (optional integration wrapper)
 
 Sanitizers:
 - **ASAN**: Detects memory errors (heap/stack)
@@ -167,7 +178,7 @@ Sanitizers:
 ### Run Benchmarks
 
 ```bash
-./OrderBookBenchmarks`
+./benchmarks/bookBenchmark
 ```
 
 Benchmarks measure:
@@ -179,7 +190,7 @@ Benchmarks measure:
 ### Run Tests
 
 ```bash
-./OrderBookTests
+./tests/orderTests
 ```
 
 Unit tests cover:
