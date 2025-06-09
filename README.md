@@ -137,7 +137,7 @@ A full performance test harness measures mean and p99 latency as well as sustain
 ### Clone and Configure
 
 ```bash
-git clone https://github.com/yourusername/OrderBook.git
+git clone https://github.com/giomillsy/OrderBook.git
 cd OrderBook
 mkdir build && cd build
 ```
